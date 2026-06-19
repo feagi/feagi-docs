@@ -5,7 +5,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 const config: Config = {
   title: "FEAGI Documentation",
   tagline: "Build brains. Connect embodiments. Understand the architecture.",
-  favicon: "img/favicon.svg",
+  favicon: "img/feagi-logo.png",
 
   // FEAGI_DOCS_URL and FEAGI_DOCS_BASE_URL can be overridden in CI.
   // Default values target the final production location.
@@ -90,7 +90,11 @@ const config: Config = {
       title: "FEAGI",
       logo: {
         alt: "FEAGI Logo",
-        src: "img/logo.svg",
+        // feagi-logo.png is white on black — suitable for dark mode.
+        // Replace src with a transparent/light variant once available.
+        src: "img/feagi-logo.png",
+        srcDark: "img/feagi-logo.png",
+        style: { borderRadius: "4px" },
       },
       items: [
         {
