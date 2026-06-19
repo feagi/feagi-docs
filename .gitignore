@@ -10,7 +10,7 @@ _sources/
 docs/brain-builder/visualizer/
 docs/contributing/feagi-core-source/
 docs/sdk/api/_mcp-source.md
-docs/sdk/embodiments/*.md
+docs/sdk/embodiments/
 static/img/bv/
 
 # OS
