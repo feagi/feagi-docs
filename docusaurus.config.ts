@@ -161,9 +161,9 @@ const config: Config = {
         {
           title: "Docs",
           items: [
-            { label: "Brain Builder", to: "/brain-builder/intro" },
-            { label: "SDK & Integrations", to: "/sdk/intro" },
-            { label: "Contributing", to: "/contributing/intro" },
+            { label: "Brain Builder", to: "/brain-builder/" },
+            { label: "SDK & Integrations", to: "/sdk/" },
+            { label: "Contributing", to: "/contributing/" },
             { label: "API Reference", href: `${siteRoot}/feagi/api-docs` },
           ],
         },

@@ -48,11 +48,11 @@ export default function Home(): ReactNode {
         <div className="container">
           <div className={styles.grid}>
             <JourneyCard
-              title="Brain Builder"
+              title="Brain Design and Visualization"
               audience="Researchers, roboticists, AI practitioners"
               description="Design, configure, and train FEAGI brains. Connect them to physical robots or simulators. Use the Brain Visualizer and Neurorobotics Studio."
               link="/brain-builder"
-              linkLabel="Start building"
+              linkLabel="Start designing"
             />
             <JourneyCard
               title="SDK & Integrations"
