@@ -8,6 +8,10 @@ import type * as Preset from "@docusaurus/preset-classic";
 const siteRoot = process.env.FEAGI_DOCS_URL ?? "https://brainsforrobots.com";
 
 const config: Config = {
+  customFields: {
+    // Exposed to client-side pages via useDocusaurusContext().siteConfig.customFields
+    siteRoot: siteRoot,
+  },
   title: "FEAGI Documentation",
   tagline: "Build brains. Connect embodiments. Understand the architecture.",
   favicon: "img/feagi-logo.png",
@@ -66,6 +70,18 @@ const config: Config = {
   ],
 
   plugins: [
+    [
+      "@easyops-cn/docusaurus-search-local",
+      {
+        hashed: true,
+        language: ["en"],
+        // Index all three doc sections
+        docsRouteBasePath: ["/brain-builder", "/sdk", "/contributing"],
+        docsDir: ["docs/brain-builder", "docs/sdk", "docs/contributing"],
+        indexBlog: false,
+        searchBarPosition: "right",
+      },
+    ],
     [
       "@docusaurus/plugin-content-docs",
       {

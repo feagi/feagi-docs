@@ -5,6 +5,11 @@ import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
 import styles from "./index.module.css";
 
+// siteUrl is baked in at build time via FEAGI_DOCS_URL.
+// Cross-site links (outside /docs/ baseUrl) must use absolute URLs because
+// Docusaurus prepends baseUrl to any href that starts with "/".
+declare const process: { env: { FEAGI_DOCS_URL?: string } };
+
 type JourneyCardProps = {
   title: string;
   audience: string;
@@ -28,6 +33,7 @@ function JourneyCard({ title, audience, description, link, linkLabel }: JourneyC
 
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
+  const siteUrl = (siteConfig.customFields?.siteRoot as string) ?? "https://brainsforrobots.com";
 
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
@@ -65,8 +71,8 @@ export default function Home(): ReactNode {
           </div>
 
           <div className={styles.apiCallout}>
-            <strong>REST API Reference</strong> — interactive Swagger UI and full OpenAPI 3.0 spec.{" "}
-            <Link to="/feagi/api-docs">Open API reference</Link>
+            <strong>REST API Reference</strong> — interactive viewer and full OpenAPI 3.0 spec.{" "}
+            <a href={`${siteUrl}/feagi/api-docs`}>Open API reference</a>
           </div>
         </div>
       </main>
