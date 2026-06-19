@@ -90,11 +90,10 @@ const config: Config = {
       title: "FEAGI",
       logo: {
         alt: "FEAGI Logo",
-        // feagi-logo.png is white on black — suitable for dark mode.
-        // Replace src with a transparent/light variant once available.
+        // feagi-logo.png is black on white — light mode.
+        // Provide feagi-logo-dark.png (white/transparent bg) for dark mode.
         src: "img/feagi-logo.png",
-        srcDark: "img/feagi-logo.png",
-        style: { borderRadius: "4px" },
+        srcDark: "img/feagi-logo-dark.png",
       },
       items: [
         {
