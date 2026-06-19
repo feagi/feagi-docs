@@ -1,0 +1,96 @@
+name: Deploy docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feagi-docs
+        uses: actions/checkout@v4
+
+      # Pull content from source repos into the expected doc paths.
+      # Each checkout targets the folder Docusaurus reads from.
+
+      - name: Checkout brain-visualizer guides and assets
+        uses: actions/checkout@v4
+        with:
+          repository: feagi/brain-visualizer
+          path: _sources/brain-visualizer
+          sparse-checkout: |
+            godot_source/BrainVisualizer/Guides
+            godot_source/BrainVisualizer/UI/GenericResources
+
+      - name: Checkout feagi-core docs
+        uses: actions/checkout@v4
+        with:
+          repository: feagi/feagi-core
+          path: _sources/feagi-core
+          sparse-checkout: docs
+
+      - name: Checkout embodiment-controllers
+        uses: actions/checkout@v4
+        with:
+          repository: feagi/embodiment-controllers
+          path: _sources/embodiment-controllers
+
+      - name: Checkout feagi-mcp
+        uses: actions/checkout@v4
+        with:
+          repository: feagi/feagi-mcp
+          path: _sources/feagi-mcp
+
+      - name: Sync source content into docs tree
+        run: node scripts/sync-sources.mjs
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Override with production values once brainsforrobots.com/docs is wired up:
+          #   FEAGI_DOCS_URL: https://brainsforrobots.com
+          #   FEAGI_DOCS_BASE_URL: /docs/
+          FEAGI_DOCS_URL: https://feagi.github.io
+          FEAGI_DOCS_BASE_URL: /feagi-docs/
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

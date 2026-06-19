@@ -1,0 +1,24 @@
+/* FEAGI Docs custom theme */
+
+:root {
+  --ifm-color-primary: #389cb5;
+  --ifm-color-primary-dark: #3290a8;
+  --ifm-color-primary-darker: #2f889e;
+  --ifm-color-primary-darkest: #276f82;
+  --ifm-color-primary-light: #3ea8c2;
+  --ifm-color-primary-lighter: #41afca;
+  --ifm-color-primary-lightest: #57bcd5;
+  --ifm-code-font-size: 90%;
+  --docusaurus-highlighted-code-line-bg: rgba(56, 156, 181, 0.1);
+}
+
+[data-theme="dark"] {
+  --ifm-color-primary: #57bcd5;
+  --ifm-color-primary-dark: #3fb1cd;
+  --ifm-color-primary-darker: #33adc9;
+  --ifm-color-primary-darkest: #2190a9;
+  --ifm-color-primary-light: #6fc7dc;
+  --ifm-color-primary-lighter: #7bcbe0;
+  --ifm-color-primary-lightest: #a2daeb;
+  --docusaurus-highlighted-code-line-bg: rgba(87, 188, 213, 0.1);
+}

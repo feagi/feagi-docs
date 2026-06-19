@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+.docusaurus/
+
+# Synced source content (generated at build time, not committed)
+_sources/
+docs/brain-builder/visualizer/
+docs/contributing/feagi-core-source/
+docs/sdk/api/_mcp-source.md
+docs/sdk/embodiments/*.md
+static/img/bv/
+
+# OS
+.DS_Store
