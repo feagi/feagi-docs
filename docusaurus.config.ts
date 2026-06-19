@@ -2,6 +2,11 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
+// Derive the site root so cross-site links (outside /docs/ baseUrl) use full URLs.
+// Docusaurus prepends baseUrl to any href that starts with "/", so links to
+// /feagi/api-docs must be absolute to avoid becoming /docs/feagi/api-docs.
+const siteRoot = process.env.FEAGI_DOCS_URL ?? "https://brainsforrobots.com";
+
 const config: Config = {
   title: "FEAGI Documentation",
   tagline: "Build brains. Connect embodiments. Understand the architecture.",
@@ -117,9 +122,14 @@ const config: Config = {
           label: "Contributing",
         },
         {
-          href: "/feagi/api-docs",
+          href: `${siteRoot}/feagi/api-docs`,
           label: "API Reference",
           position: "left",
+        },
+        {
+          href: "https://brainsforrobots.com",
+          label: "brainsforrobots.com",
+          position: "right",
         },
         {
           href: "https://github.com/feagi",
@@ -138,7 +148,7 @@ const config: Config = {
             { label: "Brain Builder", to: "/brain-builder/intro" },
             { label: "SDK & Integrations", to: "/sdk/intro" },
             { label: "Contributing", to: "/contributing/intro" },
-            { label: "API Reference", href: "/feagi/api-docs" },
+            { label: "API Reference", href: `${siteRoot}/feagi/api-docs` },
           ],
         },
         {
