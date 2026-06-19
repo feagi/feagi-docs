@@ -4,6 +4,7 @@ node_modules/
 # Build output
 build/
 .docusaurus/
+api-docs/
 
 # Synced source content (generated at build time, not committed)
 _sources/

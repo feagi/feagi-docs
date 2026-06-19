@@ -6,11 +6,18 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+  # Triggered by feagi-core CI after a successful push to main
+  repository_dispatch:
+    types: [feagi-core-updated]
+  # Nightly rebuild as a safety net for any source-repo changes
+  schedule:
+    - cron: '0 3 * * *'
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout feagi-docs
         uses: actions/checkout@v4
@@ -24,12 +31,18 @@ jobs:
             godot_source/BrainVisualizer/Guides
             godot_source/BrainVisualizer/UI/GenericResources
 
-      - name: Checkout feagi-core docs
+      - name: Checkout feagi-core docs (sparse)
         uses: actions/checkout@v4
         with:
           repository: feagi/feagi-core
           path: _sources/feagi-core
           sparse-checkout: docs
+
+      - name: Checkout feagi-core full (for API spec build)
+        uses: actions/checkout@v4
+        with:
+          repository: feagi/feagi-core
+          path: _sources/feagi-core-build
 
       - name: Checkout embodiment-controllers
         uses: actions/checkout@v4
@@ -43,31 +56,57 @@ jobs:
           repository: feagi/feagi-mcp
           path: _sources/feagi-mcp
 
-      - name: Sync source content into docs tree
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            _sources/feagi-core-build/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('_sources/feagi-core-build/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Generate OpenAPI spec and Scalar API reference
+        run: node scripts/generate-api-reference.mjs
+
+      - name: Sync documentation sources
         run: node scripts/sync-sources.mjs
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build Docusaurus
         run: npm run build
         env:
           FEAGI_DOCS_URL: https://brainsforrobots.com
           FEAGI_DOCS_BASE_URL: /docs/
 
-      # Upload the built static site as an artifact.
-      # The nrs-portal deployment pipeline downloads this artifact
-      # and copies it into public/docs/ before deploying Next.js.
+      # Package both the Docusaurus build and the API reference into a single
+      # artifact with the directory structure nrs-portal expects under public/:
+      #   dist/docs/            -> public/docs/
+      #   dist/feagi/api-docs/  -> public/feagi/api-docs/
+      - name: Package artifact
+        run: |
+          mkdir -p dist/docs
+          mkdir -p dist/feagi/api-docs
+          cp -r build/. dist/docs/
+          cp -r api-docs/. dist/feagi/api-docs/
+
       - name: Upload docs artifact
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.event_name == 'repository_dispatch' || github.event_name == 'schedule'
         uses: actions/upload-artifact@v4
         with:
           name: feagi-docs-build
-          path: build/
+          path: dist/
           retention-days: 30
+          overwrite: true
