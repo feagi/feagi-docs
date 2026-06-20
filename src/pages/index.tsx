@@ -33,7 +33,6 @@ function JourneyCard({ title, audience, description, link, linkLabel }: JourneyC
 
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
-  const siteUrl = (siteConfig.customFields?.siteRoot as string) ?? "https://brainsforrobots.com";
 
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
@@ -72,7 +71,7 @@ export default function Home(): ReactNode {
 
           <div className={styles.apiCallout}>
             <strong>REST API Reference</strong> — interactive viewer and full OpenAPI 3.0 spec.{" "}
-            <a href={`${siteUrl}/feagi/api-docs`}>Open API reference</a>
+            <a href="/feagi/api-docs">Open API reference</a>
           </div>
         </div>
       </main>

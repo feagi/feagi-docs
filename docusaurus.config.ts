@@ -121,7 +121,7 @@ const config: Config = {
           type: "docSidebar",
           sidebarId: "brainBuilder",
           position: "left",
-          label: "Brain Builder",
+          label: "Brain Design",
         },
         {
           type: "docSidebar",
@@ -161,7 +161,7 @@ const config: Config = {
         {
           title: "Docs",
           items: [
-            { label: "Brain Builder", to: "/brain-builder/" },
+            { label: "Brain Design", to: "/brain-builder/" },
             { label: "SDK & Integrations", to: "/sdk/" },
             { label: "Contributing", to: "/contributing/" },
             { label: "API Reference", href: `${siteRoot}/feagi/api-docs` },
